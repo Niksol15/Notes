@@ -9,7 +9,8 @@ namespace Notes
     {
         public Note()
         {
-            NoteToNoteReferences = new HashSet<NoteToNoteReference>();
+            NoteToNoteReferenceFromNotes = new HashSet<NoteToNoteReference>();
+            NoteToNoteReferenceToNotes = new HashSet<NoteToNoteReference>();
             TagsAtNoteRelationships = new HashSet<TagsAtNoteRelationship>();
         }
 
@@ -21,7 +22,8 @@ namespace Notes
         public int? FolderId { get; set; }
 
         public virtual Folder Folder { get; set; }
-        public virtual ICollection<NoteToNoteReference> NoteToNoteReferences { get; set; }
+        public virtual ICollection<NoteToNoteReference> NoteToNoteReferenceFromNotes { get; set; }
+        public virtual ICollection<NoteToNoteReference> NoteToNoteReferenceToNotes { get; set; }
         public virtual ICollection<TagsAtNoteRelationship> TagsAtNoteRelationships { get; set; }
     }
 }

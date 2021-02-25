@@ -28,7 +28,7 @@ namespace Notes
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server= LAPTOP-EJRS4QR8; Database=ISTP; Trusted_Connection=True; ");
+                optionsBuilder.UseSqlServer("Server=LAPTOP-EJRS4QR8; Database=ISTP; Trusted_Connection=True; ");
             }
         }
 
@@ -45,6 +45,11 @@ namespace Notes
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.HasOne(d => d.ParentFolder)
+                    .WithMany(p => p.InverseParentFolder)
+                    .HasForeignKey(d => d.ParentFolderId)
+                    .HasConstraintName("FK_Folders_Folders");
             });
 
             modelBuilder.Entity<Note>(entity =>
@@ -68,10 +73,16 @@ namespace Notes
             modelBuilder.Entity<NoteToNoteReference>(entity =>
             {
                 entity.HasOne(d => d.FromNote)
-                    .WithMany(p => p.NoteToNoteReferences)
+                    .WithMany(p => p.NoteToNoteReferenceFromNotes)
                     .HasForeignKey(d => d.FromNoteId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_NoteToNoteReferences_Notes");
+
+                entity.HasOne(d => d.ToNote)
+                    .WithMany(p => p.NoteToNoteReferenceToNotes)
+                    .HasForeignKey(d => d.ToNoteId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_NoteToNoteReferences_Notes1");
             });
 
             modelBuilder.Entity<Tag>(entity =>

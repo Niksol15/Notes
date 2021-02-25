@@ -12,5 +12,6 @@ namespace Notes
         public int ToNoteId { get; set; }
 
         public virtual Note FromNote { get; set; }
+        public virtual Note ToNote { get; set; }
     }
 }
